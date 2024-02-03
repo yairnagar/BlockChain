@@ -1,0 +1,4 @@
+Your public key aka wallet address
+ 04faa0aa4c424a4d8720a80b4a0bf65eb3e102caa80823beb02038adda3bdc0a9f3c55038e14704c11dd9429b1de76ff53010de9be0c0f2d2519271edf0038584d
+Your private key, keep it secret
+ 887d2b0cda814cb25830007b18b2c60a5450529cebd13654b654101bdcf6e717
