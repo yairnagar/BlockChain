@@ -28,10 +28,10 @@ class Transaction {
         }
 
         // Calculate the hash of the transaction
-        const hashTx = this.calculateHash();
+         this.hashTx = this.calculateHash();
 
         // Use the signing key to sign the hash, encoding the result in base64
-        const sig = signingKey.sign(hashTx, 'base64');
+        const sig = signingKey.sign(this.hashTx, 'base64');
 
         // Convert the signature to a DER (Distinguished Encoding Rules) encoded hexadecimal string
         this.signature = sig.toDER('hex');
