@@ -7,13 +7,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function burn(sourceAccount, blockchainInstance){
-    console.log("pre burn balance:", blockchainInstance.getBalance(sourceAccount.address))
-    const trx = sourceAccount.createTransaction(sourceAccount,null,2);
-    blockchainInstance.addTransaction(trx);
-    console.log("post burn balance:", blockchainInstance.getBalance(sourceAccount.address))
-}
-
 const transactions = [];
 const wallets = [];
 const signatures =[];
@@ -32,15 +25,18 @@ wallets.push(walletMica);
 wallets.push(walletTom);
 wallets.push(walletYair);
 
+console.log("Starting the miner and mining a block");
+const walletMiner = new Wallet();
 
 console.log("fund wallets")
 walletMica.fundWallet(blockchainInstance);//init wallet
 walletTom.fundWallet(blockchainInstance);//init wallet
 walletYair.fundWallet(blockchainInstance);//init wallet
+blockchainInstance.minePendingTransactions(walletMiner.address);
+
+
 console.log("mica balance:", blockchainInstance.getBalance(walletMica.address))
 
-console.log("Starting the miner and mining a block");
-const walletMiner = new Wallet();
 
 
 console.log("initiating 30 transactions")
@@ -57,16 +53,13 @@ console.log("initiating 30 transactions")
      }
      const amountToTransfer = getRandomInt(1,10);
 
-     if(fromWallet.getBalance<amountToTransfer){//validating that the source address has sufficient funds
+     if(blockchainInstance.getBalance(fromWallet.address)<amountToTransfer){//validating that the source address has sufficient funds
         console.log("insufficient funds !")
         return;
      }
 
      const trx = fromWallet.createTransaction(toWallet.address,amountToTransfer);//creating trx
-     blockchainInstance.addTransaction(trx);//adding transaction to the mempool 
-
-     //burn(fromWallet,blockchainInstance);
-     
+     blockchainInstance.addTransaction(trx);//adding transaction to the mempool      
         
     const signatureData = {
             hashTx: trx.hashTx,

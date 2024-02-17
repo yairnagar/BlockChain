@@ -142,7 +142,7 @@ class BlockChain {
     minePendingTransactions(miningRewardAddress) {
         const rewardTx = new Transaction(null, miningRewardAddress, this.miningReward);
         this.pendingTransactions.push(rewardTx);
-
+        console.log("pending trasnacrions:", this.pendingTransactions)
         let block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
 
         // Calculate Merkle Root before mining
@@ -161,6 +161,9 @@ class BlockChain {
         }
         this.pendingTransactions.push(transaction);
         this.transactionFilter.add(transaction.calculateHash());
+        const burnTx = new Transaction(this.address, null, 2);
+        this.pendingTransactions.push(burnTx);
+
     }
 
     // Get the balance of an address in the blockchain
