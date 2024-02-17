@@ -25,10 +25,6 @@ class Wallet {
         return transaction;
     }
 
-    // Verify if a transaction exists in the blockchain
-    verifyTransactionExistence(transactionHash, blockchain) {
-        return blockchain.searchTransaction(transactionHash) !== null;
-    }
 
     // Verify if a transaction is authentic (signed by this wallet)
     verifyTransactionAuthentication(transaction) {

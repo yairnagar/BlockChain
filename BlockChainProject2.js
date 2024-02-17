@@ -83,21 +83,6 @@ class Block {
         console.log('Calculated Merkle Root:', this.merkleRoot);
     }
 
-    // Verify the inclusion of a transaction in the Merkle tree
-    verifyTransactionInclusion(transactionHash) {
-        const transactionHashBuffer = Buffer.from(transactionHash, 'hex');
-        const leaves = this.transactions.map((tx) => tx.calculateHash());
-        const tree = new MerkleTree(leaves, sha256);
-    
-        const inclusionProof = tree.getProof(transactionHashBuffer);
-    
-        const verificationResult = tree.verify(inclusionProof, transactionHashBuffer, tree.getRoot());
-    
-        console.log('Verification Result:', verificationResult);
-    
-        return verificationResult;
-    }
-
     // Mine the block with a given difficulty
     mineBlock(difficulty){
         while(this.hash.substring(0,difficulty) !== Array(difficulty+1).join('0')){
@@ -152,6 +137,12 @@ class BlockChain {
         console.log('Block Successfully Mined');
         this.chain.push(block);
         this.pendingTransactions = [];
+    }
+
+    getTransactionMerkle(txHash){
+        const latestBlock = this.getLatestBlock();
+        const res = latestBlock.verifyTransactionInclusion(txHash);
+        console.log("ressss:",res);
     }
 
     // Add a transaction to the pending transactions and Bloom filter
@@ -217,6 +208,21 @@ class BlockChain {
         // Transaction not found
         return null;
     }
+
+        // Verify the inclusion of a Block in the Merkle tree
+        verifyBlockInclusion(blockRootHash) {
+            const HashBuffer = Buffer.from(blockRootHash, 'hex');
+            const leaves = this.chain.map((tx) => tx.calculateHash());
+            const tree = new MerkleTree(leaves, sha256);
+        
+            const inclusionProof = tree.getProof(transactionHashBuffer);
+        
+            const verificationResult = tree.verify(inclusionProof, transactionHashBuffer, tree.getRoot());
+        
+            console.log('Verification Result:', verificationResult);
+        
+            return verificationResult;
+        }
 
     getPendingTransactionsLength(){
         return this.pendingTransactions.length;
