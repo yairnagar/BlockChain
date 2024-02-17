@@ -42,6 +42,9 @@ class Transaction {
         // If 'fromAddress' is null, consider the transaction as valid (e.g., for mining rewards)
         if(this.fromAddress == null) return true;
 
+        // If 'toAddress' is null, consider the transaction as valid (e.g., for burn function)
+        if(this.toAddress == null) return true;
+
         // Check if there is a valid signature present in the transaction
         if(!this.signature || this.signature.length === 0){
             throw new Error('No signature in the transaction');
@@ -121,7 +124,7 @@ class BlockChain {
         this.chain = [this.createGenesisBlock()];
         this.difficulty = 5;
         this.pendingTransactions = [];
-        this.miningReward = 6;
+        this.miningReward = 25;
         this.transactionFilter = new SimpleBloomFilter(256, 4);
     }
 
@@ -153,9 +156,6 @@ class BlockChain {
 
     // Add a transaction to the pending transactions and Bloom filter
     addTransaction(transaction){
-        if(!transaction.fromAddress || !transaction.toAddress){
-            throw new Error('Transaction must include from and to Address');
-        }
         if (!transaction.isValid()) {
             throw new Error('Can not add an invalid transaction');
         }
@@ -213,6 +213,10 @@ class BlockChain {
 
         // Transaction not found
         return null;
+    }
+
+    getPendingTransactionsLength(){
+        return this.pendingTransactions.length;
     }
 
 

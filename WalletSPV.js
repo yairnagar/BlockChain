@@ -11,6 +11,12 @@ class Wallet {
         this.transactions = []; // Keep track of transactions relevant to this wallet
     }
 
+    fundWallet(blockchainInstance){
+        const transaction = new Transaction(null, this.address, 200);
+        console.log("init transaction is:",transaction);
+        blockchainInstance.addTransaction(transaction);
+    }
+
     // Create a new transaction from this wallet to a recipient
     createTransaction(toAddress, amount) {
         const transaction = new Transaction(this.address, toAddress, amount);
